@@ -20,7 +20,9 @@ fn test_vesting_lifecycle_success() {
     // 1. Create vesting schedule
     client.create_vesting(&creator, &beneficiary, &total_keys, &vesting_period);
 
-    let schedule = client.get_vesting_schedule(&creator, &beneficiary).expect("Schedule should exist");
+    let schedule = client
+        .get_vesting_schedule(&creator, &beneficiary)
+        .expect("Schedule should exist");
     assert_eq!(schedule.beneficiary, beneficiary);
     assert_eq!(schedule.total_keys, 100);
     assert_eq!(schedule.vesting_period_ledgers, 100);
@@ -35,7 +37,9 @@ fn test_vesting_lifecycle_success() {
     assert_eq!(claimed_50, 50);
     assert_eq!(client.get_balance(&creator, &beneficiary), 50);
 
-    let schedule_after_50 = client.get_vesting_schedule(&creator, &beneficiary).expect("Schedule should exist");
+    let schedule_after_50 = client
+        .get_vesting_schedule(&creator, &beneficiary)
+        .expect("Schedule should exist");
     assert_eq!(schedule_after_50.claimed_keys, 50);
 
     // 3. Advance ledger to full completion (>= 100)
@@ -47,7 +51,9 @@ fn test_vesting_lifecycle_success() {
     assert_eq!(claimed_rest, 50);
     assert_eq!(client.get_balance(&creator, &beneficiary), 100);
 
-    let final_schedule = client.get_vesting_schedule(&creator, &beneficiary).expect("Schedule should exist");
+    let final_schedule = client
+        .get_vesting_schedule(&creator, &beneficiary)
+        .expect("Schedule should exist");
     assert_eq!(final_schedule.claimed_keys, 100);
 }
 
@@ -59,7 +65,9 @@ fn test_vesting_already_claimed_reverts() {
     let beneficiary = Address::generate(&env);
 
     client.create_vesting(&creator, &beneficiary, &100, &100);
-    let schedule = client.get_vesting_schedule(&creator, &beneficiary).expect("Schedule should exist");
+    let schedule = client
+        .get_vesting_schedule(&creator, &beneficiary)
+        .expect("Schedule should exist");
 
     // Advance 50 ledgers
     let mut ledger_info = env.ledger().get();
